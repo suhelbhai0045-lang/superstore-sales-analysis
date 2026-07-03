@@ -1,35 +1,30 @@
-# Superstore Sales Analysis — SQL + Power BI
+# Superstore Sales Analysis
 
-End-to-end retail sales analysis project built as part of my Data Analytics learning journey.
-
-## Tools Used
-- MySQL 8.0 (25 SQL queries)
-- Power BI Desktop (dashboard)
-- Excel (initial data exploration)
+SQL-based analysis of the Sample Superstore dataset — 9,994 orders across 4 regions and 3 product categories (2014–2017).
 
 ## Dataset
-Superstore Sales — 9,994 orders | 4 years | 4 regions | 3 categories
-Source: Kaggle (publicly available)
+- Source: Superstore Dataset on Kaggle (Vivek Chowdhury)
+- Rows: 9,994 | Columns: 21
+- Tool used: SQLite (via sqliteonline.com)
 
-## Key Findings
-- Orders with 40%+ discount are net loss-making on average
-- Tables sub-category has negative total profit despite decent sales volume
-- Q4 (Oct–Dec) is consistently the strongest quarter every year
-- West region has the highest profit margin; Central is the weakest
-- Technology products (Copiers, Phones) have the best margins
+## Key Insights
 
-## SQL Queries Cover
-- Sales trends and quarterly analysis
-- Product and sub-category profitability
-- Regional performance comparison
-- Customer segmentation and behaviour
-- Discount impact analysis
-- Window functions for cumulative sales
+- **Total Sales:** ₹22,97,200.86 | **Total Profit:** ₹2,86,397.02
+- **West region** is the top performer (₹7,25,457.82 in sales), while **South** lags behind (₹3,91,721.91)
+- **Technology** category has the highest average profit per order (₹78.75), while **Furniture** is the weakest (₹8.7)
+- **1,871 orders (out of 9,994) resulted in a loss**, totaling ₹1,56,131.29 — largely tied to high discounting
+- **1,166 orders had discounts above 30%**, a likely driver of the loss orders above
+- **Tables and Bookcases sub-categories are loss-making** overall (-₹17,725.48 and -₹3,472.56 respectively) despite generating significant sales — a pricing/discount problem, not a demand problem
+- Sales have grown steadily year over year: ₹4.84L (2014) → ₹7.33L (2017)
+- **Sean Miller** is the top customer by total spend (₹25,043.05)
+- **Consumer segment** drives the most orders (2,586), followed by Corporate (1,514) and Home Office (909)
 
-## Project Structure
-- /sql — All 25 MySQL queries
-- /screenshots — Power BI dashboard images
-- /data — Dataset source info
+## Files
+- `superstore_queries.sql` — 20 SQL queries covering aggregation, filtering, and window functions
+
+## Tools Used
+- SQL (SQLite)
+- Power BI (dashboard — in progress)
 
 ## Author
 Suhail Hussain | B.Sc Mathematics | Aspiring Data Analyst
