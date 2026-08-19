@@ -1,3 +1,4 @@
+
 # Superstore Sales Analysis
 
 SQL-based analysis of the Sample Superstore dataset — 9,994 orders across 4 regions and 3 product categories (2014–2017).
@@ -9,14 +10,14 @@ SQL-based analysis of the Sample Superstore dataset — 9,994 orders across 4 re
 
 ## Key Insights
 
-- **Total Sales:** ₹22,97,200.86 | **Total Profit:** ₹2,86,397.02
-- **West region** is the top performer (₹7,25,457.82 in sales), while **South** lags behind (₹3,91,721.91)
-- **Technology** category has the highest average profit per order (₹78.75), while **Furniture** is the weakest (₹8.7)
-- **1,871 orders (out of 9,994) resulted in a loss**, totaling ₹1,56,131.29 — largely tied to high discounting
+- **Total Sales:** $2.30M | **Total Profit:** $286.4K
+- **West region** is the top performer ($725,457.82 in sales), while **South** lags behind ($391,721.91)
+- **Technology** category has the highest average profit per order ($78.75), while **Furniture** is the weakest ($8.7)
+- **1,871 orders (out of 9,994) resulted in a loss**, totaling $156,131.29 — largely tied to high discounting
 - **1,166 orders had discounts above 30%**, a likely driver of the loss orders above
-- **Tables and Bookcases sub-categories are loss-making** overall (-₹17,725.48 and -₹3,472.56 respectively) despite generating significant sales — a pricing/discount problem, not a demand problem
-- Sales have grown steadily year over year: ₹4.84L (2014) → ₹7.33L (2017)
-- **Sean Miller** is the top customer by total spend (₹25,043.05)
+- **Tables and Bookcases sub-categories are loss-making** overall (-$17,725.48 and -$3,472.56 respectively) despite generating significant sales — a pricing/discount problem, not a demand problem
+- Sales have grown steadily year over year: $484K (2014) → $733K (2017)
+- **Sean Miller** is the top customer by total spend ($25,043.05)
 - **Consumer segment** drives the most orders (2,586), followed by Corporate (1,514) and Home Office (909)
 
 ## Files
@@ -24,7 +25,7 @@ SQL-based analysis of the Sample Superstore dataset — 9,994 orders across 4 re
 
 ## Tools Used
 - SQL (SQLite)
-- Power BI (dashboard — in progress)
+- Power BI (interactive dashboard)
 
 ## Author
 Suhail Hussain | B.Sc Mathematics | Aspiring Data Analyst
