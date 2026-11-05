@@ -1,124 +1,239 @@
--- ============================================
--- SUPERSTORE SALES ANALYSIS - SQL QUERIES
--- Dataset: Sample Superstore (Kaggle - Vivek Chowdhury)
--- Tool: SQLite
--- ============================================
+-- =====================================================
+-- PROJECT: SUPERSTORE SALES ANALYSIS
+-- SQL DIALECT: SQLite
+-- DATASET: Sample Superstore
+-- TABLE NAME: Superstore
+-- =====================================================
 
--- ===== BASIC QUERIES =====
+-- BASIC BUSINESS METRICS
 
--- Q1: Total Sales
-SELECT ROUND(SUM(sales), 2) as Total_Sales FROM Superstore;
+-- Q1. Total Sales
+SELECT ROUND(SUM(sales), 2) AS total_sales
+FROM Superstore;
 
--- Q2: Total Profit
-SELECT ROUND(SUM(profit), 2) as Total_Profit FROM Superstore;
+-- Q2. Total Profit
+SELECT ROUND(SUM(profit), 2) AS total_profit
+FROM Superstore;
 
--- Q3: Total number of distinct orders
-SELECT COUNT(DISTINCT order_id) as Total_Orders FROM Superstore;
+-- Q3. Total Unique Orders
+SELECT COUNT(DISTINCT order_id) AS total_orders
+FROM Superstore;
 
--- Q4: Item count by category
-SELECT category, COUNT(*) as Total_Items FROM Superstore GROUP BY category;
-
--- Q5: Top 10 products by sales
-SELECT product_name, ROUND(SUM(sales), 2) as Total_Sales 
-FROM Superstore 
-GROUP BY product_name 
-ORDER BY Total_Sales DESC 
-LIMIT 10;
-
--- ===== AGGREGATION QUERIES =====
-
--- Q6: Region-wise total sales
-SELECT region, ROUND(SUM(sales), 2) as Total_Sales 
-FROM Superstore 
-GROUP BY region 
-ORDER BY Total_Sales DESC;
-
--- Q7: Category-wise average profit
-SELECT category, ROUND(AVG(profit), 2) as Avg_Profit 
-FROM Superstore 
-GROUP BY category 
-ORDER BY Avg_Profit DESC;
-
--- Q8: Year-wise sales trend
-SELECT substr(order_date, -4) as Year, ROUND(SUM(sales), 2) as Yearly_Sales
+-- Q4. Sales Line Items by Category
+SELECT
+category,
+COUNT(*) AS line_item_count
 FROM Superstore
-GROUP BY Year
-ORDER BY Year;
+GROUP BY category
+ORDER BY line_item_count DESC;
 
--- Q9: Customer segment-wise order count
-SELECT segment, COUNT(DISTINCT order_id) as Order_Count 
-FROM Superstore 
-GROUP BY segment 
-ORDER BY Order_Count DESC;
-
--- Q10: State-wise total quantity sold (Top 10)
-SELECT state, ROUND(SUM(quantity), 0) as Total_Quantity 
-FROM Superstore 
-GROUP BY state 
-ORDER BY Total_Quantity DESC 
+-- Q5. Top 10 Products by Sales
+SELECT
+product_name,
+ROUND(SUM(sales), 2) AS total_sales
+FROM Superstore
+GROUP BY product_name
+ORDER BY total_sales DESC
 LIMIT 10;
 
--- ===== FILTERING QUERIES =====
+-- REGIONAL AND CATEGORY ANALYSIS
 
--- Q11: Loss-making orders
-SELECT COUNT(*) as Loss_Orders, ROUND(SUM(profit), 2) as Total_Loss
-FROM Superstore 
-WHERE profit < 0;
+-- Q6. Region-wise Sales
+SELECT
+region,
+ROUND(SUM(sales), 2) AS total_sales
+FROM Superstore
+GROUP BY region
+ORDER BY total_sales DESC;
 
--- Q12: High discount orders (>30%)
-SELECT COUNT(*) as High_Discount_Orders 
-FROM Superstore 
-WHERE discount > 0.3;
+-- Q7. Average Order-level Profit by Category
+WITH order_category_profit AS (
+SELECT
+category,
+order_id,
+SUM(profit) AS order_profit
+FROM Superstore
+GROUP BY category, order_id
+)
+SELECT
+category,
+ROUND(AVG(order_profit), 2) AS avg_profit_per_order
+FROM order_category_profit
+GROUP BY category
+ORDER BY avg_profit_per_order DESC;
 
--- Q13: Top 5 states by profit
-SELECT state, ROUND(SUM(profit), 2) as Total_Profit 
-FROM Superstore 
-GROUP BY state 
-ORDER BY Total_Profit DESC 
+-- Q8. Year-wise Sales Trend
+SELECT
+CAST(substr(order_date, -4) AS INTEGER) AS order_year,
+ROUND(SUM(sales), 2) AS yearly_sales
+FROM Superstore
+GROUP BY order_year
+ORDER BY order_year;
+
+-- Q9. Orders by Customer Segment
+SELECT
+segment,
+COUNT(DISTINCT order_id) AS order_count
+FROM Superstore
+GROUP BY segment
+ORDER BY order_count DESC;
+
+-- Q10. Top 10 States by Quantity Sold
+SELECT
+state,
+SUM(quantity) AS total_quantity
+FROM Superstore
+GROUP BY state
+ORDER BY total_quantity DESC
+LIMIT 10;
+
+-- DISCOUNT AND PROFIT ANALYSIS
+
+-- Q11. Loss-making Orders
+WITH order_profit AS (
+SELECT
+order_id,
+SUM(profit) AS total_order_profit
+FROM Superstore
+GROUP BY order_id
+)
+SELECT
+COUNT(*) AS loss_making_orders,
+ROUND(SUM(total_order_profit), 2) AS combined_loss
+FROM order_profit
+WHERE total_order_profit < 0;
+
+-- Q12. Orders with Discount Above 30%
+SELECT
+COUNT(DISTINCT order_id) AS high_discount_orders
+FROM Superstore
+WHERE discount > 0.30;
+
+-- Q13. Top 5 States by Profit
+SELECT
+state,
+ROUND(SUM(profit), 2) AS total_profit
+FROM Superstore
+GROUP BY state
+ORDER BY total_profit DESC
 LIMIT 5;
 
--- Q14: Order count by ship mode
-SELECT ship_mode, COUNT(*) as Order_Count
+-- Q14. Orders by Shipping Mode
+SELECT
+ship_mode,
+COUNT(DISTINCT order_id) AS order_count
 FROM Superstore
 GROUP BY ship_mode
-ORDER BY Order_Count DESC;
+ORDER BY order_count DESC;
 
--- Q15: Top 10 customers by total spending
-SELECT customer_name, ROUND(SUM(sales), 2) as Total_Spent
+-- Q15. Top 10 Customers by Sales
+SELECT
+customer_name,
+ROUND(SUM(sales), 2) AS total_sales
 FROM Superstore
 GROUP BY customer_name
-ORDER BY Total_Spent DESC
+ORDER BY total_sales DESC
 LIMIT 10;
 
--- ===== WINDOW FUNCTIONS =====
+-- WINDOW FUNCTION ANALYSIS
 
--- Q16: Rank products by sales within each category
-SELECT product_name, category, sales,
-RANK() OVER (PARTITION BY category ORDER BY sales DESC) as Sales_Rank
+-- Q16. Rank Products by Total Sales Within Each Category
+WITH product_sales AS (
+SELECT
+category,
+product_name,
+SUM(sales) AS total_sales
 FROM Superstore
-LIMIT 15;
+GROUP BY category, product_name
+)
+SELECT
+category,
+product_name,
+ROUND(total_sales, 2) AS total_sales,
+RANK() OVER (
+PARTITION BY category
+ORDER BY total_sales DESC
+) AS sales_rank
+FROM product_sales
+ORDER BY category, sales_rank;
 
--- Q17: Running total of sales by order date
-SELECT order_id, order_date, sales,
-SUM(sales) OVER (ORDER BY order_date) as Running_Total
+-- Q17. Running Total of Daily Sales
+WITH daily_sales AS (
+SELECT
+date(
+substr(order_date, -4) || '-' ||
+printf('%02d', CAST(substr(order_date, 1,
+instr(order_date, '/') - 1) AS INTEGER)) || '-' ||
+printf('%02d', CAST(substr(
+order_date,
+instr(order_date, '/') + 1,
+instr(substr(order_date,
+instr(order_date, '/') + 1), '/') - 1
+) AS INTEGER))
+) AS sales_date,
+SUM(sales) AS daily_sales
 FROM Superstore
-LIMIT 15;
+GROUP BY sales_date
+)
+SELECT
+sales_date,
+ROUND(daily_sales, 2) AS daily_sales,
+ROUND(
+SUM(daily_sales) OVER (
+ORDER BY sales_date
+ROWS BETWEEN UNBOUNDED PRECEDING
+AND CURRENT ROW
+), 2
+) AS running_total_sales
+FROM daily_sales
+WHERE sales_date IS NOT NULL
+ORDER BY sales_date;
 
--- Q18: Row number for top customer per region
-SELECT region, customer_name, sales,
-ROW_NUMBER() OVER (PARTITION BY region ORDER BY sales DESC) as Row_Num
+-- Q18. Highest-Sales Customer in Each Region
+WITH customer_sales AS (
+SELECT
+region,
+customer_name,
+SUM(sales) AS total_sales
 FROM Superstore
-LIMIT 20;
+GROUP BY region, customer_name
+),
+ranked_customers AS (
+SELECT
+region,
+customer_name,
+total_sales,
+ROW_NUMBER() OVER (
+PARTITION BY region
+ORDER BY total_sales DESC, customer_name
+) AS customer_rank
+FROM customer_sales
+)
+SELECT
+region,
+customer_name,
+ROUND(total_sales, 2) AS total_sales
+FROM ranked_customers
+WHERE customer_rank = 1
+ORDER BY region;
 
--- Q19: Sub-categories with lowest profit (loss-making sub-categories)
-SELECT sub_category, ROUND(SUM(sales), 2) as Total_Sales, ROUND(SUM(profit), 2) as Total_Profit
+-- PRODUCT PROFITABILITY
+
+-- Q19. Five Lowest-Profit Sub-categories
+SELECT
+sub_category,
+ROUND(SUM(sales), 2) AS total_sales,
+ROUND(SUM(profit), 2) AS total_profit
 FROM Superstore
 GROUP BY sub_category
-ORDER BY Total_Profit ASC
+ORDER BY total_profit ASC
 LIMIT 5;
 
--- Q20: Category and Sub-category sales breakdown
-SELECT category, sub_category, ROUND(SUM(sales), 2) as Total_Sales
+-- Q20. Category and Sub-category Sales Breakdown
+SELECT
+category,
+sub_category,
+ROUND(SUM(sales), 2) AS total_sales
 FROM Superstore
 GROUP BY category, sub_category
-ORDER BY category, Total_Sales DESC;
+ORDER BY category, total_sales DESC;
