@@ -1,78 +1,102 @@
-Superstore Sales Analysis
+Superstore Sales Analysis | SQL
 
-This project explores the Sample Superstore retail dataset using SQL and SQLite. I worked on understanding sales performance, profitability, customer segments, regional trends, discounts, and product performance.
+About the Project
 
-Project Overview
+I worked on this project to practise SQL using a retail sales dataset. Instead of only writing basic queries, I tried to explore different business questions related to sales, profit, customers, regions, discounts and products.
 
-- Dataset: Sample Superstore
-- Source: Kaggle (Vivek Chowdhury)
-- Total Records: 9,994 rows
-- Total Columns: 21
-- Time Period: 2014–2017
-- SQL Tool: SQLite
+The analysis is written in SQLite. Each query focuses on a specific question, and I have added comments to make the purpose of the query easier to understand.
 
-Note: The 9,994 figure represents dataset rows, not the number of unique orders.
+Project Details
 
-Business Questions
+Detail| Information
+Project| Superstore Sales Analysis
+Dataset| Sample Superstore
+Database| SQLite
+Language| SQL
+Queries| 20
+Analysis Focus| Sales, Profit, Customers and Products
 
-I used SQL to explore the following questions:
+Questions I Explored
 
-1. What are the total sales and total profit?
-2. How many unique orders are recorded?
-3. Which product categories have the most sales records?
-4. Which products generate the highest sales?
-5. Which region contributes the most revenue?
-6. How does average order-level profit vary by category?
-7. How have sales changed over the years?
-8. Which customer segment generates the most orders?
-9. Which states sell the highest quantities?
-10. How many orders have negative overall profit?
-11. How many orders include discounts above 30%?
-12. Which states generate the highest profit?
-13. Which shipping modes are used most frequently?
-14. Which customers generate the highest sales?
-15. How do products rank within their categories?
-16. What does the cumulative sales trend look like?
-17. Who is the highest-sales customer in each region?
-18. Which sub-categories have the lowest profit?
+Sales Analysis
+
+1. What are the overall sales and profit?
+2. How many unique orders are in the dataset?
+3. How many sales line items belong to each category?
+4. Which products have the highest sales?
+5. Which region generates the highest sales?
+6. How do yearly sales compare?
+7. Which customer segment has the most orders?
+
+Customer and Regional Analysis
+
+8. Which states have the highest quantity sold?
+9. Which customers generate the highest sales?
+10. Who is the highest-sales customer in each region?
+11. How are orders distributed across shipping modes?
+
+Profit and Discount Analysis
+
+12. What is the average profit per order within each category?
+13. How many orders have an overall loss?
+14. How many orders contain discounts above 30%?
+15. Which states generate the highest profit?
+16. Which sub-categories have the lowest profit?
+
+Product and Trend Analysis
+
+17. How do products rank within their categories?
+18. What does the running total of daily sales look like?
 19. How are sales distributed across categories and sub-categories?
+20. Which 10 products generate the highest sales?
 
-SQL Concepts Used
+SQL Skills Practised
 
-- SELECT, WHERE and ORDER BY
+- Filtering and sorting data
 - GROUP BY and aggregate functions
 - COUNT and COUNT DISTINCT
 - Common Table Expressions (CTEs)
-- Subqueries
-- CASE expressions
-- Window functions: RANK() and ROW_NUMBER()
+- Window functions
+- RANK() and ROW_NUMBER()
+- PARTITION BY
 - Running totals
-- Date handling in SQLite
+- Date conversion and date-based analysis
 
 Repository Files
 
-File| Description
-"superstore_queries.sql"| 20 commented SQL queries used for the analysis
+File| Purpose
+"README.md"| Project details and instructions
+"superstore_queries.sql"| SQL queries with comments
 
-How to Run This Project
+How to Run
 
-1. Download the Sample Superstore dataset from Kaggle.
-2. Import the dataset into an SQLite database.
-3. Name the table "Superstore".
+1. Download the Sample Superstore dataset.
+2. Create an SQLite database.
+3. Import the dataset into a table named "Superstore".
 4. Make sure the column names match those used in the SQL file.
-5. Open "superstore_queries.sql" in an SQLite-compatible SQL editor.
-6. Execute the queries individually to explore the results.
+5. Open "superstore_queries.sql" in an SQLite-compatible editor.
+6. Run the queries individually.
 
-Project Limitations
+Expected Column Names
 
-- This repository currently contains SQL analysis only.
-- A Power BI dashboard and PBIX file are not included yet.
-- The findings depend on the dataset version and correct data import.
-- The analysis identifies patterns in the data; it does not prove the causes behind them.
+The queries use these column names:
+
+"order_id", "order_date", "ship_date", "ship_mode", "customer_id", "customer_name", "segment", "country", "city", "state", "postal_code", "region", "product_id", "category", "sub_category", "product_name", "sales", "quantity", "discount", "profit".
+
+The original CSV may use spaces or different capitalization. Rename the columns during import if required.
+
+Date format: The yearly sales and daily running-total queries currently expect dates in "M/D/YYYY" or "MM/DD/YYYY" format. Other date formats may require changes to those queries.
+
+Current Limitations
+
+- The repository currently contains SQL analysis only.
+- A Power BI dashboard and its PBIX file have not been added.
+- Query outputs and business findings will be added after testing the queries against the actual dataset.
+- Results may vary depending on the dataset version and data preparation.
 
 About Me
 
 Suhail Hussain
 B.Sc. Mathematics Student | Aspiring Data Analyst
 
-GitHub: "suhelbhai0045-lang" (https://github.com/suhelbhai0045-lang)
+GitHub: https://github.com/suhelbhai0045-lang
